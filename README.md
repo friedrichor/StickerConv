@@ -49,3 +49,4 @@
 
 [Generative Agents: Interactive Simulacra of Human Behavior](http://arxiv.org/abs/2304.03442)
  
+git clone -b pegs https://github.com/friedrichor/StickerConv.git

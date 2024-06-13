@@ -1,0 +1,54 @@
+model:
+    model_type: pegs_gen
+    text_model: '/datas/huggingface/vicuna-7b-v1.5-16k'
+    max_text_length: 64
+    vision_modules: '/datas/huggingface/blip2-opt-2.7b/'
+    freeze_vision_encoder: True
+    freeze_qformer: True
+    vision_precision: 'fp16'
+    image_start_token: "<Img>"
+    image_end_token: "</Img>"
+
+dataset:
+    laion:
+        storage: /datas/llm_datasets/LAION_115M/laion/laion_dataset/{00000..2000}.tar
+        vision_processor:
+            train:
+                name: 'blip2_image_train'
+                image_size: 224
+        text_processor:
+            train:
+                name: 'blip_caption'
+        sample_ratio: 1
+
+run:
+    runner: base_runner
+    
+    learning_rate: 1e-4
+    lr_scheduler: "cosine_with_warmup"
+    beta1: 0.9
+    beta2: 0.999
+    eps: 1e-06
+    weight_decay: 0.05
+
+    num_train_epochs: 4
+    warmup_steps: 10
+    iters_per_epoch: 20
+
+    batch_size_train: 32
+    batch_size_eval: 32
+    num_workers: 4
+    
+    seed: 42
+    outputs_dir: "outputs/pretrain_perception"
+      
+    amp: True
+    resume_ckpt_path: null
+    
+    evaluate: False 
+    train_splits: ["train"]
+      
+    device: "cuda"
+    distributed: True
+    world_size: 1
+    dist_url: "env://"
